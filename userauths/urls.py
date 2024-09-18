@@ -6,5 +6,5 @@ app_name = "userauths"
 
 urlpatterns = [
     path("sign-up/", views.RegisterView, name="sign-up")
-
+    
 ]

@@ -9,6 +9,8 @@ class UserRegisterForm(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Enter username"}))
     email = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Enter email"}))
     phone = forms.CharField(widget=forms.TextInput(attrs={"placeholder":"Enter phone"}))
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder":"Enter password"}))
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder":"Enter password agin"}))
     
     class Meta:
         model = User
