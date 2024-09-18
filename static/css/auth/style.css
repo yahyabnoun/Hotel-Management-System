@@ -200,7 +200,7 @@ body {
   font-weight: 400;
   font-family: Poppins; }
 
-.signup_container {
+.sign_container {
   width: 900px;
   background: #fff;
   margin: 0 auto;
@@ -253,7 +253,10 @@ body {
   margin-bottom: 100px; 
   margin-top: 100px; 
 }
-
+.signin {
+  margin-bottom: 100px; 
+  margin-top: 100px; 
+}
 .signup-content {
   padding: 75px 0; }
 
@@ -518,12 +521,12 @@ label.valid {
   margin-top: 10px; }
 
 @media screen and (max-width: 1200px) {
-  .signup_container {
+  .sign_container {
     width: calc( 100% - 30px);
     max-width: 100%; } 
   }
 @media screen and (min-width: 1024px) {
-  .signup_container {
+  .sign_container {
     max-width: 1200px; } }
 @media screen and (max-width: 768px) {
   .signup-content, .signin-content {
