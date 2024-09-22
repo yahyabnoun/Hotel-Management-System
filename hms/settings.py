@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'mathfilters',
     'ckeditor_uploader',
-    # 'ckeditor',
+    'django-ckeditor-5',
     'taggit',
 
 ]

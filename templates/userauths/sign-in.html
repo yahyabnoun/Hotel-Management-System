@@ -5,10 +5,9 @@
 <link href="{% static 'css/auth/style.css' %}" rel="stylesheet">
 <!-- Sing in  Form -->
 <section class="signin">
-    {%for msg in messages%}
-    <p>{{msg}}</p>
-    {%endfor%}
+
     <div class="sign_container">
+
         <div class="signin-content">
             <div class="signin-image">
                 <figure><img src="{% static 'img/auth/signin-image.jpg' %}"
@@ -45,6 +44,24 @@
             </div>
         </div>
     </div>
+
+
+    <script>
+
+        {%for msg in messages%}
+        
+
+
+            Swal.fire({
+                title: 'info!',
+                text: "{{msg}}",
+                icon: 'info',
+                confirmButtonText: 'Cool'
+            })
+        {%endfor%}
+
+    </script>
+
 </section>
 
 {% endblock %}

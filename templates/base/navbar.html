@@ -2,9 +2,9 @@
 {% load static %}
 <!-- Navbar & Hero Start -->
 <!-- Navbar & Hero Start -->
-<div class="container-fluid position-relative py-4 "
-    style="background-color: #14141F;">
-    <nav
+<div class="container-fluid position-relative py-4 " 
+    style="background-color: #14141F;" >
+    <nav style='font-family: "Heebo", sans-serif;'
         class="navbar navbar-expand-lg text-light px-4 px-lg-5 py-3 py-lg-0">
         <a href="{% url "hotel:index" %}" class="navbar-brand p-0">
             <h1 class="text-primary m-0"><i
@@ -38,7 +38,7 @@
             </div>
 
             {% if user.is_authenticated %}
-                <a  class="btn btn-primary rounded-pill mx-2 py-2 px-4">Dashboard</a>
+                <a href="/admin" class="btn btn-primary rounded-pill mx-2 py-2 px-4">Dashboard</a>
                 <a href="{% url "userauths:sign-out" %}" class="btn btn-primary rounded-pill mx-2 py-2 px-4">Logout</a>
             {% else %}
 
