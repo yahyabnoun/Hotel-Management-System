@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 
-from django.contrib.auth import authenticate, login 
+from django.contrib.auth import authenticate, login ,logout
 from django.contrib import messages
 
 from userauths.models import User, Profile 
@@ -70,3 +70,10 @@ def loginViewTemp(request):
             return redirect("userauths:sign-in")    
             
     return render(request, "userauths/sign-in.html")
+
+
+
+def LogoutView(request):
+    logout(request)
+    messages.success(request, "You have been logged out")
+    return redirect("userauths:sign-in")

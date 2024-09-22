@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
+    {% include "./header.html" %}
 
-    {% include "./header.html" %} 
     <body>
         <!-- Spinner Start -->
         <div id="spinner"
@@ -15,54 +15,13 @@
         </div>
         <!-- Spinner End -->
         <!-- Topbar End -->
+        {% include "./navbar.html" %}
 
-        <!-- Navbar & Hero Start -->
-        <div class="container-fluid position-relative py-4 " style="background-color: #14141F;">
-            <nav
-                class="navbar navbar-expand-lg text-light px-4 px-lg-5 py-3 py-lg-0">
-                <a href class="navbar-brand p-0">
-                    <h1 class="text-primary m-0"><i
-                            class="fa fa-map-marker-alt me-3"></i>Tourist</h1>
-                    <!-- <img src="{% static 'img/logo.png' %}" alt="Logo"> -->
-                </a>
-                <button class="navbar-toggler" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                    <span class="fa fa-bars"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <div class="navbar-nav ms-auto py-0 ">
-                        <a href="" class="nav-item nav-link active">Home</a>
-                        <a href="" class="nav-item nav-link text-light">About</a>
-                        <a href="" class="nav-item nav-link text-light">Services</a>
-                        <a href="" class="nav-item nav-link text-light">Packages</a>
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle text-light"
-                                data-bs-toggle="dropdown ">Pages</a>
-                            <div class="dropdown-menu m-0">
-                                <a href="" class="dropdown-item text-light">Destination</a>
-                                <a href="" class="dropdown-item text-light">Booking</a>
-                                <a href="" class="dropdown-item text-light">Travel
-                                    Guides</a>
-                                <a href="" class="dropdown-item text-light">Testimonial</a>
-                                <a href="" class="dropdown-item text-light">404
-                                    Page</a>
-                            </div>
-                        </div>
-                        <a href="" class="nav-item nav-link text-light ">Contact</a>
-                    </div>
-                    <a href class="btn btn-primary rounded-pill mx-3 py-2 px-4">Register</a>
-                </div>
-            </nav>
- 
-        </div>
+        {% block content %}
 
+        {% endblock %}
 
-        {% block content %} 
-
-        {% endblock %} 
-
-
-        {% include "./footer.html" %} 
+        {% include "./footer.html" %}
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i
                 class="bi bi-arrow-up"></i></a>
