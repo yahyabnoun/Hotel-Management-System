@@ -6,6 +6,7 @@ from django.utils.html import mark_safe
 from shortuuid import ShortUUID
 from userauths.models import User
 from shortuuid.django_fields import ShortUUIDField
+from django_ckeditor_5.fields import CKEditor5Field
 
 HOTEL_STATUS = (
     ("Draft", "Draft"),
@@ -42,7 +43,7 @@ PAYMENT_STATUS = (
 class Hotel(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True) 
     name = models.CharField(max_length=100)
-    description= models.TextField(null=True, blank=True)
+    description= CKEditor5Field(null=True, blank=True , config_name="extends")
     image = models.FileField(upload_to="hotel_galley") 
     address = models.CharField(max_length=200)
     mobile = models.CharField(max_length=200)
@@ -56,7 +57,7 @@ class Hotel(models.Model):
     slug= models.SlugField (unique=True)
     date = models.DateTimeField(auto_now_add=True)
     
-    def _str_(self):
+    def __str__(self):
         return self.name
     
     def save(self, *args, **kwargs):
@@ -66,20 +67,20 @@ class Hotel(models.Model):
             
             self.slug= slugify(self.name)+'-' + str(uniqueid.lower())
             
-    
         super(Hotel, self).save(*args, **kwargs)
         
     def thumbnail(self):
         return mark_safe("<img src='%s' width='50' height='50' style='object-fit: cover; border-radius: 6px;' />" %(self.image.url) )
     
-    
+    def hotel_gallery(self):
+        return HotelGallery.objects.filter(hotel=self)
     
 class HotelGallery(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     image = models.FileField(upload_to="hotel_galley")
     hgid= ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvwxyz")
     
-    def _str_(self):
+    def __str__(self):
         return str(self.hotel.name)
     
     class Meta:
@@ -93,7 +94,7 @@ class HotelFeatures(models.Model):
     icon= models.CharField(max_length=100, null=True, blank=True)
     name = models.CharField(max_length=100, null=True, blank=True)
     
-    def _str_(self):
+    def __str__(self):
         return str(self.name)
     
     class Meta:
@@ -107,7 +108,7 @@ class HotelFaqs(models.Model):
     answer = models.CharField(max_length=1000, null=True, blank=True) 
     date= models.DateTimeField(auto_now_add=True)
     
-    def _str_(self):
+    def __str__(self):
         return str(self.question)
     
     class Meta:
@@ -124,22 +125,20 @@ class RoomType(models.Model):
     slug= models.SlugField (unique=True)
     date= models.DateTimeField(auto_now_add=True)
     
-    def _str_(self):
+    def __str__(self):
         return f"{self.type} {self.hotel.name} {self.price}"
     
     class Meta:
-        verbose_name_plural = "Hotel Type"
+        verbose_name_plural = "Room Types"
         
     def rooms_count(self):
-        Room.objects.filter(room_type=self).count()
-        
+        return Room.objects.filter(room_type=self).count()
         
     def save(self, *args, **kwargs):
-        if self.slug== "" or self.slug== None:
-            uuid_key = ShortUUID.uuid()
-            uniqueid = uuid_key[:4]
-            
-            self.slug= slugify(self.name)+'-' + str(uniqueid.lower())
+        if not self.slug:  # Only generate slug if it is empty
+            uuid_key = ShortUUID().random(length=4)  # Ensure it's ShortUUID() and not ShortUUID.uuid()
+            self.slug = slugify(self.type) + '-' + str(uuid_key.lower())  # Use 'type' instead of 'name'
+        super(RoomType, self).save(*args, **kwargs)  # Call the parent class's save method
             
 
 class Room(models.Model):
@@ -150,7 +149,7 @@ class Room(models.Model):
     rid = ShortUUIDField (unique=True, length=10, max_length=20, alphabet="abcdefghijklmnopqrstuvwxyz") 
     date= models.DateTimeField(auto_now_add=True)
     
-    def _str_(self):
+    def __str__(self):
         return f"{self.room_type} - {self.hotel.name} {self.price}"
     
     class Meta:
@@ -164,7 +163,7 @@ class Room(models.Model):
     
 
 
-class Booking (models.Model):
+class Booking(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True) 
     payment_status = models.CharField(max_length=100, choices=PAYMENT_STATUS)
     full_name = models.CharField(max_length=200)
@@ -201,7 +200,7 @@ class Booking (models.Model):
     
     
     
-    def _str_(self):
+    def __str__(self):
         return f"{self.booking_id}"
     
     def rooms (self):
@@ -214,7 +213,7 @@ class ActivityLog(models.Model):
     description= models.TextField(null=True, blank=True)
     date=  models.DateTimeField(auto_now_add=True)
     
-    def _str_(self):
+    def __str__(self):
         return f"{self.booking}"
     
 class StaffOnDuty(models.Model):
@@ -222,5 +221,5 @@ class StaffOnDuty(models.Model):
     staff_id = models.CharField(max_length=100, null=True, blank=True) 
     date = models.DateTimeField(auto_now_add=True)
     
-    def _str_(self):
+    def __str__(self):
         return f"{self.staff_id}"

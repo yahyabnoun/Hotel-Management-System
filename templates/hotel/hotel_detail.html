@@ -1,0 +1,79 @@
+
+
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8">
+
+                <div class="row">
+                    {% for hotel_gallery in hotel.hotel_gallery.all %}
+                        {% if forloop.first %}
+                            <!-- First image, larger -->
+                            <div class="col-12 mb-2">
+                                <img src="{{hotel_gallery.image.url}}" alt="Hotel Image 1" class="img-fluid rounded hotel-image-main w-100" style="height:400px;">
+                            </div>
+                        {% else %}
+                            <!-- Second, third, and fourth images, smaller -->
+                            <div class="col-4 mb-2">
+                                <img src="{{hotel_gallery.image.url}}" alt="Hotel Image Small" class="img-fluid rounded hotel-image-small w-100" style="height:200px;">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <h1 class="mt-4">Luxury Ocean View Hotel</h1>
+                <p class="text-muted">⭐⭐⭐⭐⭐ 5-Star Hotel</p>
+                <p>Experience luxury at its finest with breathtaking ocean views and world-class amenities.</p>
+                
+                <h2 class="mt-4">Amenities</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><span class="amenity-icon">🏊</span> Swimming Pool</p>
+                        <p><span class="amenity-icon">🍽️</span> Restaurant</p>
+                        <p><span class="amenity-icon">🅿️</span> Free Parking</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><span class="amenity-icon">💻</span> Free Wi-Fi</p>
+                        <p><span class="amenity-icon">🏋️</span> Fitness Center</p>
+                        <p><span class="amenity-icon">🧖</span> Spa</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">MAD1,598</h3>
+                        <p class="card-text text-muted">Total before taxes</p>
+                        <form>
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <label for="checkIn" class="form-label">CHECK-IN</label>
+                                    <input type="date" class="form-control" id="checkIn" value="2024-09-24">
+                                </div>
+                                <div class="col-6">
+                                    <label for="checkOut" class="form-label">CHECKOUT</label>
+                                    <input type="date" class="form-control" id="checkOut" value="2024-09-27">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="guests" class="form-label">GUESTS</label>
+                                <select class="form-select" id="guests">
+                                    <option>1 guest</option>
+                                    <option>2 guests</option>
+                                    <option>3 guests</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Reserve</button>
+                        </form>
+                        <p class="text-center mt-2">You won't be charged yet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
