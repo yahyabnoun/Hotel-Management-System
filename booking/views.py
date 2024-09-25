@@ -31,3 +31,4 @@ def check_room_availability(request):
         url = reverse("hotel:room_type_detail", args=[hotel.slug, room_type.slug])
         url_with_params = f"{url}?hotel-id={id}&checkin={checkin}&checkout={checkout}&adult={adult}&children={children}&r"
         return HttpResponseRedirect(url_with_params)
+    
