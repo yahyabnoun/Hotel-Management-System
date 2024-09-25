@@ -75,6 +75,12 @@ class Hotel(models.Model):
     def hotel_gallery(self):
         return HotelGallery.objects.filter(hotel=self)
     
+    
+    def hotel_rocm_types(self):
+        return RoomType.objects.filter(hotel=self)
+    
+    
+
 class HotelGallery(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     image = models.FileField(upload_to="hotel_galley")
@@ -126,7 +132,7 @@ class RoomType(models.Model):
     date= models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f"{self.type} {self.hotel.name} {self.price}"
+        return f"{self.type} {self.hotel.name}"
     
     class Meta:
         verbose_name_plural = "Room Types"
@@ -150,7 +156,7 @@ class Room(models.Model):
     date= models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f"{self.room_type} - {self.hotel.name} {self.price}"
+        return f"{self.room_type} - {self.hotel.name}"
     
     class Meta:
         verbose_name_plural = "Rooms"

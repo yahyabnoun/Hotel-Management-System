@@ -1,0 +1,66 @@
+
+
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-5">
+  <h2 class="text-center">{{room_type.type}}</h2>
+  <p class="text-center">The {{room_type.type}} room has {{rooms.count}} available rooms</p>
+
+  <div class="mt-5 d-flex gap-3">
+
+    <div class="d-flex flex-wrap gap-3 col-md-8">
+
+      {% for room in rooms %}
+
+        <div  class="card text-dark bg-light mb-3 col-md-3 flex-fill align-content-start "  
+          >
+          <div class="card-header">Room No. {{room.room_number}}</div>
+          <div class="card-body">
+            <h5 class="card-title">${{room.room_type.price}}/Pre Night</h5>
+            <p class="card-text">Beds : {{room.room_type.number_of_beds}}</p>
+            <p class="card-text">Capacity : {{room.room_type.number_of_beds}}</p>
+          </div>
+        </div>
+
+      {% endfor %}
+
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">MAD1,598</h3>
+          <p class="card-text text-muted">Total before taxes</p>
+          <form>
+            <div class="row mb-3">
+              <div class="col-6">
+                <label for="checkIn" class="form-label">CHECK-IN</label>
+                <input type="date" class="form-control" id="checkIn"
+                  value="2024-09-24">
+              </div>
+              <div class="col-6">
+                <label for="checkOut" class="form-label">CHECKOUT</label>
+                <input type="date" class="form-control" id="checkOut"
+                  value="2024-09-27">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="guests" class="form-label">GUESTS</label>
+              <select class="form-select" id="guests">
+                <option>1 guest</option>
+                <option>2 guests</option>
+                <option>3 guests</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Reserve</button>
+          </form>
+          <p class="text-center mt-2">You won't be charged yet</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
