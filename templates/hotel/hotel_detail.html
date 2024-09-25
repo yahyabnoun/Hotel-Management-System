@@ -63,23 +63,39 @@
                     <div class="card-body">
                         <h3 class="card-title">MAD1,598</h3>
                         <p class="card-text text-muted">Total before taxes</p>
-                        <form>
+                        <form method="post" action="{% url 'booking:check_room_availability' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="hotel-id" class="form-control" value="{{hotel.id}}">
+
                             <div class="row mb-3">
                                 <div class="col-6">
-                                    <label for="checkIn" class="form-label">CHECK-IN</label>
-                                    <input type="date" class="form-control" id="checkIn" value="2024-09-24">
+                                    <label for="checkin" class="form-label">CHECK-IN</label>
+                                    <input type="date" name="checkin" class="form-control" id="checkin" value="">
                                 </div>
                                 <div class="col-6">
-                                    <label for="checkOut" class="form-label">CHECKOUT</label>
-                                    <input type="date" class="form-control" id="checkOut" value="2024-09-27">
+                                    <label for="checkout" class="form-label">CHECKOUT</label>
+                                    <input type="date" name="checkout" class="form-control" id="checkout" value="">
+                                </div>
+                            </div>
+
+
+
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <label for="adult" class="form-label">adult</label>
+                                    <input type="number" name="adult" class="form-control" id="adult" value="1">
+                                </div>
+                                <div class="col-6">
+                                    <label for="children" class="form-label">children</label>
+                                    <input type="number" name="children" class="form-control" id="children" value="0">
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label for="guests" class="form-label">GUESTS</label>
-                                <select class="form-select" id="guests">
-                                    <option>1 guest</option>
-                                    <option>2 guests</option>
-                                    <option>3 guests</option>
+                                <label for="room_type" class="form-label">Room Type</label>
+                                <select class="form-select" name="room_type" id="room_type">
+                                    {% for hotel_type in hotel.hotel_rocm_types%}
+                                        <option value="{{hotel_type.slug}}">{{hotel_type.type}}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Reserve</button>
@@ -87,14 +103,18 @@
                         <p class="text-center mt-2">You won't be charged yet</p>
                     </div>
                 </div>
-                <h3 class="card-title mt-4">Pricing</h3>
+                <h3 class="card-title mt-5">Pricing</h3>
                 <div class="card" style="width: 100%;">
                     <div class="card-header bg-primary text-white">
                       Select Pass
                     </div>
                     <ul class="list-group list-group-flush">
                         {% for hotel_type in hotel.hotel_rocm_types%}
-                            <li class="list-group-item d-flex justify-content-between align-items-center">  <span class="d-flex flex-column"><a href="{% url 'hotel:room_type_detail' hotel_type.hotel.slug hotel_type.slug %}">sssss</a>  {{hotel_type.type}} <span class=" "> Room capacity : {{hotel_type.room_capacity}}</span><span class=" "> Number of Beds : {{hotel_type.number_of_beds}}</span> </span> <span class="badge bg-primary rounded-3">${{hotel_type.price}}</span></li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">  <span class="d-flex flex-column">  {{hotel_type.type}} <span class=" "> Room capacity : {{hotel_type.room_capacity}}</span><span class=" "> Number of Beds : {{hotel_type.number_of_beds}}</span> </span> <span class="badge bg-primary rounded-3">${{hotel_type.price}} 
+
+                            </span>
+                            <!-- <a class="btn btn-primary rounded-3 py-2 px-4 text-white" href="{% url 'hotel:room_type_detail' hotel_type.hotel.slug hotel_type.slug %}">Reserve</a> -->
+                        </li>
                         {% endfor %}
                     </ul>
                   </div>
@@ -103,6 +123,25 @@
 
             </div>
         </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const checkoutInput = document.getElementById("checkout");
+                const checkintInput = document.getElementById("checkin");
+                
+                // Get today's date in YYYY-MM-DD format
+                const today = new Date();
+                const dd = String(today.getDate()).padStart(2, '0');
+                const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+                const yyyy = today.getFullYear();
+                
+                const formattedDate = `${yyyy}-${mm}-${dd}`;
+                
+                // Set the default value
+                checkoutInput.value = formattedDate;
+                checkintInput.value = formattedDate;
+            });
+            
+        </script>
     </div>
 
 

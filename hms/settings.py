@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'user_dashboard',
     'hotel',
     'addon',
+    'booking',
 
     'import_export',
     'crispy_forms',
