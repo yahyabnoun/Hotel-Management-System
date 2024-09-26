@@ -9,7 +9,7 @@
     {% if messages %}
     <ul class="messages text-center">
       {% for message in messages %}
-          <div class="alert alert-success" role="alert">
+          <div class="alert alert-{{ message.tags }}" role="alert">
         {{ message }}
       </div>
       {% endfor %}

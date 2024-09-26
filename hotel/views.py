@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from flask import redirect
 from django.contrib import messages
@@ -47,6 +48,19 @@ def room_type_detail(request, slug, rt_slug):
         room_typePost = RoomType.objects.get(id=room_type_id)
         
         if request.user.is_authenticated:
+
+            # Check if the user already has a booking for the same room type and date
+            existing_booking = Booking.objects.filter(
+                user=request.user,
+                room_type=room_type,
+                check_in_date=checkin,
+                check_out_date=checkout
+            ).exists()
+
+            if existing_booking:
+                messages.error(request, 'You already have a booking for this room type on these dates.')
+                next = request.POST.get('next', '/checkout')
+                return HttpResponseRedirect(next)
 
             booking = Booking.objects.create(
                 user=request.user,
@@ -132,9 +146,7 @@ def checkout(request):
             context = {
                 "booking": booking
             }
-            
-            print(booking)
-            
+            print()
             return render(request, "hotel/checkout.html", context)
         except Booking.DoesNotExist:
             # Redirect or show a message if the user doesn't have any booking
