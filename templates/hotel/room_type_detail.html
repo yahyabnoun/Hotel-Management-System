@@ -5,73 +5,97 @@
 {% block content %}
 
 <div class="container mt-5">
-  <h2 class="text-center">{{room_type.type}}</h2>
-  <p class="text-center">The {{room_type.type}} room has {{rooms.count}} available rooms</p>
+  <h2 class="text-center">All available Rooms</h2>
+  <p class="text-center">The {{room_type.type}} room has {{rooms.count}}
+    available rooms</p>
 
   <div class="mt-5 d-flex gap-3">
 
-    <div class="d-flex flex-wrap gap-3 col-md-8">
-
+    <div
+      class="d-flex flex-wrap gap-3 col-md-8 align-self-start justify-content-center">
+      {% if rooms %}
       {% for room in rooms %}
 
-        <div  class="card text-dark bg-light mb-3 col-md-3 flex-fill align-content-start "  
-          >
+      <div class="card text-dark bg-light mb-3 col-md-3">
+        <form method="post" >
+          {% csrf_token %}
           <div class="card-header">Room No. {{room.room_number}}</div>
           <div class="card-body">
             <h5 class="card-title">${{room.room_type.price}}/Pre Night</h5>
             <p class="card-text">Beds : {{room.room_type.number_of_beds}}</p>
             <p class="card-text">Capacity : {{room.room_type.number_of_beds}}</p>
+            <input type="hidden" name="room_id" value="{{ room.id }}">
+            <input type="hidden" name="room_type" value="{{ room_type.id }}">
+            <input type="hidden" name="price" value="{{ room.room_type.price }}">
+            <input type="hidden" name="checkin" value="{{ checkin }}">
+            <input type="hidden" name="checkout" value="{{ checkout }}">
+            <input type="hidden" name="adult" value="{{ adult }}">
+            <input type="hidden" name="children" value="{{ children }}">
+            <input type="hidden" name="hotel-id" class="form-control"
+              value="{{hotel.id}}">
           </div>
-        </div>
+          <button type="submit" class="btn btn-primary w-100">Check
+            Availability</button>
+        </form>
+      </div>
 
       {% endfor %}
+      {% else %}
 
+      <p>ffff</p>
+
+      {% endif %}
     </div>
     <div class="col-md-4">
       <div class="card">
         <div class="card-body">
-            <h3 class="card-title">MAD1,598</h3>
-            <p class="card-text text-muted">Total before taxes</p>
-            <form method="post" action="{% url 'booking:check_room_availability' %}">
-                {% csrf_token %}
-                <input type="hidden" name="hotel-id" class="form-control" value="{{hotel.id}}">
-                
-                <div class="row mb-3">
-                    <div class="col-6">
-                        <label for="checkin" class="form-label">CHECK-IN</label>
-                        <input type="date" name="checkin" class="form-control" id="checkin" value="">
-                    </div>
-                    <div class="col-6">
-                        <label for="checkout" class="form-label">CHECKOUT</label>
-                        <input type="date" name="checkout" class="form-control" id="checkout" value="">
-                    </div>
-                </div>
+          <h3 class="card-title">MAD1,598</h3>
+          <p class="card-text text-muted">Total before taxes</p>
+          <form method="post"
+            action="{% url 'booking:check_room_availability' %}">
+            {% csrf_token %}
+            <input type="hidden" name="hotel-id" class="form-control"
+              value="{{hotel.id}}">
 
+            <div class="row mb-3">
+              <div class="col-6">
+                <label for="checkin" class="form-label">CHECK-IN</label>
+                <input type="date" name="checkin" class="form-control"
+                  id="checkin" value="{{ checkin }}">
+              </div>
+              <div class="col-6">
+                <label for="checkout" class="form-label">CHECKOUT</label>
+                <input type="date" name="checkout" class="form-control"
+                  id="checkout" value="{{ checkout }}">
+              </div>
+            </div>
 
-
-                <div class="row mb-3">
-                    <div class="col-6">
-                        <label for="adult" class="form-label">adult</label>
-                        <input type="number" name="adult" class="form-control" id="adult" value="1">
-                    </div>
-                    <div class="col-6">
-                        <label for="children" class="form-label">children</label>
-                        <input type="number" name="children" class="form-control" id="children" value="0">
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label for="room_type" class="form-label">Room Type</label>
-                    <select class="form-select" name="room_type" id="room_type">
-                        {% for hotel_type in hotel.hotel_rocm_types%}
-                            <option value="{{hotel_type.slug}}">{{hotel_type.type}}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Check Availability</button>
-            </form>
-            <p class="text-center mt-2">You won't be charged yet</p>
+            <div class="row mb-3">
+              <div class="col-6">
+                <label for="adult" class="form-label">adult</label>
+                <input type="number" name="adult" class="form-control"
+                  id="adult" value="{{ adult }}">
+              </div>
+              <div class="col-6">
+                <label for="children" class="form-label">children</label>
+                <input type="number" name="children" class="form-control"
+                  id="children" value="{{ children }}">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="room_type" class="form-label">Room Type</label>
+              <select class="form-select" name="room_type" id="room_type">
+                {% for hotel_type in hotel.hotel_rocm_types%}
+                <option value="{{hotel_type.slug}}">{{hotel_type.type}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Check
+              Availability</button>
+          </form>
+          <p class="text-center mt-2">You won't be charged yet</p>
         </div>
-    </div>
+      </div>
     </div>
   </div>
 
