@@ -42,7 +42,7 @@ PAYMENT_STATUS = (
 
 class Hotel(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True) 
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, null=True)
     description= CKEditor5Field(null=True, blank=True , config_name="extends")
     image = models.FileField(upload_to="hotel_galley") 
     address = models.CharField(max_length=200)
@@ -171,10 +171,10 @@ class Room(models.Model):
 
 class Booking(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True) 
-    payment_status = models.CharField(max_length=100, choices=PAYMENT_STATUS)
-    full_name = models.CharField(max_length=200)
-    email=models. EmailField(max_length=200)
-    phone = models.CharField(max_length=200)
+    payment_status = models.CharField(max_length=100, choices=PAYMENT_STATUS ,default='pending')
+    full_name = models.CharField(max_length=200,null=True, blank=True)
+    email = models. EmailField(max_length=200,null=True, blank=True)
+    phone = models.CharField(max_length=200,null=True, blank=True)
     
     hotel = models.ForeignKey(Hotel, on_delete=models.SET_NULL, null=True, blank=True) 
     room_type = models.ForeignKey(RoomType, on_delete=models.SET_NULL, null=True, blank=True) 
@@ -187,12 +187,12 @@ class Booking(models.Model):
     
     check_in_date = models.DateField() 
     check_out_date = models.DateField()
-    total_days = models. PositiveIntegerField(default=0)
-    num_adults = models. PositiveIntegerField(default=1)
-    num_children = models. PositiveIntegerField(default=1)
+    total_days = models.PositiveIntegerField(default=0)
+    num_adults = models.PositiveIntegerField(default=0)
+    num_children = models.PositiveIntegerField(default=1)
     
     
-    checked_in=models.BooleanField(default=False)
+    checked_in = models.BooleanField(default=False)
     checked_out = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     

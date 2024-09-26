@@ -1,5 +1,3 @@
-
-
 {% extends "base/base.html" %}
 {% load static %}
 {% block content %}
@@ -8,16 +6,23 @@
   <h2 class="text-center">All available Rooms</h2>
   <p class="text-center">The {{room_type.type}} room has {{rooms.count}}
     available rooms</p>
-
+    {% if messages %}
+    <ul class="messages text-center">
+      {% for message in messages %}
+          <div class="alert alert-success" role="alert">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </ul>
+    {% endif %}
   <div class="mt-5 d-flex gap-3">
 
-    <div
-      class="d-flex flex-wrap gap-3 col-md-8 align-self-start justify-content-center">
+    <div class="d-flex flex-wrap gap-3 col-md-8 align-self-start justify-content-center">
       {% if rooms %}
       {% for room in rooms %}
 
       <div class="card text-dark bg-light mb-3 col-md-3">
-        <form method="post" >
+        <form method="post">
           {% csrf_token %}
           <div class="card-header">Room No. {{room.room_number}}</div>
           <div class="card-body">
@@ -31,8 +36,7 @@
             <input type="hidden" name="checkout" value="{{ checkout }}">
             <input type="hidden" name="adult" value="{{ adult }}">
             <input type="hidden" name="children" value="{{ children }}">
-            <input type="hidden" name="hotel-id" class="form-control"
-              value="{{hotel.id}}">
+            <input type="hidden" name="hotel-id" class="form-control" value="{{hotel.id}}">
           </div>
           <button type="submit" class="btn btn-primary w-100">Check
             Availability</button>
@@ -51,35 +55,29 @@
         <div class="card-body">
           <h3 class="card-title">MAD1,598</h3>
           <p class="card-text text-muted">Total before taxes</p>
-          <form method="post"
-            action="{% url 'booking:check_room_availability' %}">
+          <form method="post" action="{% url 'booking:check_room_availability' %}">
             {% csrf_token %}
-            <input type="hidden" name="hotel-id" class="form-control"
-              value="{{hotel.id}}">
+            <input type="hidden" name="hotel-id" class="form-control" value="{{hotel.id}}">
 
             <div class="row mb-3">
               <div class="col-6">
                 <label for="checkin" class="form-label">CHECK-IN</label>
-                <input type="date" name="checkin" class="form-control"
-                  id="checkin" value="{{ checkin }}">
+                <input type="date" name="checkin" class="form-control" id="checkin" value="{{ checkin }}">
               </div>
               <div class="col-6">
                 <label for="checkout" class="form-label">CHECKOUT</label>
-                <input type="date" name="checkout" class="form-control"
-                  id="checkout" value="{{ checkout }}">
+                <input type="date" name="checkout" class="form-control" id="checkout" value="{{ checkout }}">
               </div>
             </div>
 
             <div class="row mb-3">
               <div class="col-6">
                 <label for="adult" class="form-label">adult</label>
-                <input type="number" name="adult" class="form-control"
-                  id="adult" value="{{ adult }}">
+                <input type="number" name="adult" class="form-control" id="adult" value="{{ adult }}">
               </div>
               <div class="col-6">
                 <label for="children" class="form-label">children</label>
-                <input type="number" name="children" class="form-control"
-                  id="children" value="{{ children }}">
+                <input type="number" name="children" class="form-control" id="children" value="{{ children }}">
               </div>
             </div>
             <div class="mb-3">

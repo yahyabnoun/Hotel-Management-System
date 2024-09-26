@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from flask import redirect
+from django.contrib import messages
 
 from hotel.models import Booking, Hotel, Room, RoomType
 from django.db.models import Min
@@ -46,17 +47,25 @@ def room_type_detail(request, slug, rt_slug):
         room_typePost = RoomType.objects.get(id=room_type_id)
         
         if request.user.is_authenticated:
-        
-            # Create a new booking instance
-            # Booking.objects.create(
-            #     user=request.user,
-            #     checkin=checkin,
-            #     checkout=checkout,
-            #     adult=adult, 
-            #     children=children 
-            # )
-            print(room_id)
+
+            booking = Booking.objects.create(
+                user=request.user,
+                hotel=hotelPost,
+                room_type=room_typePost,
+                check_in_date=checkin,
+                check_out_date=checkout,
+            )
+
+            # Use the set() method to assign the room
+            booking.room.set([roomPost])
+
+            booking.save()
+
+
+            messages.success(request, 'Booking created successfully!')
         else:
+            print('booking does not created seccesfuly')
+            
             return redirect("hotel:index")
     
     context = {
@@ -69,7 +78,7 @@ def room_type_detail(request, slug, rt_slug):
         'children': children
     }
 
-    return render (request, "hotel/room_type_detail.html", context)
+    return render(request, "hotel/room_type_detail.html", context)
 
 
 # def selected_rooms(request):
@@ -110,43 +119,7 @@ def room_type_detail(request, slug, rt_slug):
         # total = room_price* days
         # hotel Hotel.objects.get(id=id)
         # =
-        
 
-@login_required
-def create_booking(request):
-    if request.method == 'POST':
-        # Get form data from POST request
-        room_id = request.POST.get('room_id')
-        price = request.POST.get('price')
-        checkin = request.POST.get('checkin')
-        checkout = request.POST.get('checkout')
-        adult = request.POST.get('adult')
-        children = request.POST.get('children')
-
-        # Fetch the room object using the room_id
-        room = Room.objects.get(id=room_id)
-
-
-        print(room)
-
-
-
-        # Create a new booking instance
-        # Booking.objects.create(
-        #     user=request.user,       # User who is logged in             # Room object fetched above
-        #     price=price,             # Price from form data
-        #     checkin=checkin,         # Check-in date
-        #     checkout=checkout,       # Check-out date
-        #     adult=adult,             # Number of adults
-        #     children=children        # Number of children
-        # )
-
-        # Redirect to a checkout or booking confirmation page
-        return redirect('checkout')
-
-    # If the request is not POST, redirect back to a relevant page
-    return redirect('hotel:index')
-        
 
 def checkout(request):
     if request.user.is_authenticated:
