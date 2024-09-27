@@ -34,54 +34,7 @@ def room_type_detail(request, slug, rt_slug):
     adult = request.GET.get('adult')
     children = request.GET.get('children')
     
-    if request.method == 'POST':
-        room_id = request.POST.get('room_id')
-        checkin = request.POST.get('checkin')
-        hotel_id = request.POST.get('hotel-id')
-        room_type_id = request.POST.get('room_type')
-        checkout = request.POST.get('checkout')
-        adult = request.POST.get('adult')
-        children = request.POST.get('children')
-        
-        hotelPost = Hotel.objects.get(id=hotel_id)
-        roomPost = Room.objects.get(id=room_id)
-        room_typePost = RoomType.objects.get(id=room_type_id)
-        
-        if request.user.is_authenticated:
 
-            # Check if the user already has a booking for the same room type and date
-            existing_booking = Booking.objects.filter(
-                user=request.user,
-                room_type=room_type,
-                check_in_date=checkin,
-                check_out_date=checkout
-            ).exists()
-
-            if existing_booking:
-                messages.error(request, 'You already have a booking for this room type on these dates.')
-                next = request.POST.get('next', '/checkout')
-                return HttpResponseRedirect(next)
-
-            booking = Booking.objects.create(
-                user=request.user,
-                hotel=hotelPost,
-                room_type=room_typePost,
-                check_in_date=checkin,
-                check_out_date=checkout,
-            )
-
-            # Use the set() method to assign the room
-            booking.room.set([roomPost])
-
-            booking.save()
-
-
-            messages.success(request, 'Booking created successfully!')
-        else:
-            print('booking does not created seccesfuly')
-            
-            return redirect("hotel:index")
-    
     context = {
         "hotel": hotel,
         "room_type":room_type, 
@@ -137,22 +90,68 @@ def room_type_detail(request, slug, rt_slug):
 
 def checkout(request):
     if request.user.is_authenticated:
+        if request.method == 'POST':
+            room_id = request.POST.get('room_id')
+            checkin = request.POST.get('checkin')
+            hotel_id = request.POST.get('hotel-id')
+            room_type_id = request.POST.get('room_type')
+            checkout = request.POST.get('checkout')
+            adult = request.POST.get('adult')
+            children = request.POST.get('children')
+            
+            hotelPost = Hotel.objects.get(id=hotel_id)
+            roomPost = Room.objects.get(id=room_id)
+            room_typePost = RoomType.objects.get(id=room_type_id)
         
+
+            # Check if the user already has a booking for the same room type and date
+            existing_booking = Booking.objects.filter(
+                user=request.user,
+                room_type=room_typePost,
+                check_in_date=checkin,
+                check_out_date=checkout
+            ).exists()
+
+            if existing_booking:
+                messages.error(request, 'You already have a booking for this room type on these dates.')
+                next = request.POST.get('next', '/checkout')
+                return HttpResponseRedirect(next)
+
+            booking = Booking.objects.create(
+                user=request.user,
+                hotel=hotelPost,
+                room_type=room_typePost,
+                check_in_date=checkin,
+                check_out_date=checkout,
+                               num_adults=adult,
+                num_children=children,
+            )
+
+            # Use the set() method to assign the room
+            booking.room.set([roomPost])
+
+            booking.save()
+
+
+            messages.success(request, 'Booking created successfully!')
+
+    
         try:
             user = request.user
 
             # Check if the user has bookings
-            booking = Booking.objects.filter(user=user)
+            booking = Booking.objects.filter(user=user,payment_status='pending')
             context = {
                 "booking": booking
             }
-            print()
+            
             return render(request, "hotel/checkout.html", context)
         except Booking.DoesNotExist:
             # Redirect or show a message if the user doesn't have any booking
             return render(request, "hotel/checkout.html")  # Or show a custom message/page
 
     # Redirect unauthenticated users to the sign-up page
-    return render(request, "userauths/sign-up.html")
+    next = request.POST.get('next', '/user/sign-in/')
+    return HttpResponseRedirect(next)
 
     

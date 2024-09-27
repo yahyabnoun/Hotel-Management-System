@@ -22,7 +22,7 @@
       {% for room in rooms %}
 
       <div class="card text-dark bg-light mb-3 col-md-3">
-        <form method="post">
+        <form method="post" action="{% url 'hotel:checkout' %}">
           {% csrf_token %}
           <div class="card-header">Room No. {{room.room_number}}</div>
           <div class="card-body">
