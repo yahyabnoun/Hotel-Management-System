@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from flask import redirect
 from django.contrib import messages
@@ -141,9 +141,20 @@ def checkout(request):
 
             # Check if the user has bookings
             booking = Booking.objects.filter(user=user,payment_status='pending')
+            
+            TOTAL = 0
+            
+            for x in booking:
+                TOTAL += x.room_type.price
+            
+            
             context = {
-                "booking": booking
+                "booking": booking,
+                "TOTAL": TOTAL
             }
+            
+            
+            
             
             return render(request, "hotel/checkout.html", context)
         except Booking.DoesNotExist:
@@ -154,4 +165,40 @@ def checkout(request):
     next = request.POST.get('next', '/user/sign-in/')
     return HttpResponseRedirect(next)
 
+    
+def deleteFromcheckout(request,booking_id):
+    
+    booking = Booking.objects.filter(user=request.user,id=booking_id,payment_status='pending').delete()
+    
+    next = request.POST.get('next', '/checkout/')
+    return HttpResponseRedirect(next)
+
+
+@login_required
+def successPayment(request):
+    if request.method == 'POST':
+        # Get data from the POST request
+        fullName = request.POST.get('fullName')
+        Email = request.POST.get('Email')
+        Phone = request.POST.get('Phone')
+        
+        booking = Booking.objects.filter(user=request.user, payment_status='pending')
+
+        TOTAL = 0
+        for bok in booking:
+            TOTAL = bok.room_type.price
+            bok.payment_status = 'paid'
+            bok.full_name = fullName
+            bok.email = Email
+            bok.phone = Phone
+            bok.total = TOTAL
+            bok.save()
+        
+        # Return success response to the frontend
+        return JsonResponse({'status': 'success'})
+    
+    return render(request, "hotel/successPayment.html")
+        
+    
+        
     

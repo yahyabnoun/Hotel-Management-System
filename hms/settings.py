@@ -30,6 +30,12 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = "userauths.User"
 
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups'
+
+
+PAYPAL_CLIENT_ID = 'AaEciTdF3EVPyMfRB1ym5X-kh7xoWPMhjFmlGhnsMzrELb0DJeJCSDKL9oP_FA5d06bQzoHf-Cez_E9Y'
+PAYPAL_SECRET = 'EJUrmHPtNJkLykR5oP0nuv1T3T4aXG2tjXReifIpxN9pRyfbFXy-e9zeug9KtFa4b0evF3PPplMZn_h_'
 # Application definition
 
 INSTALLED_APPS = [
