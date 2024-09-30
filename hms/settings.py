@@ -28,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGIN_URL = "userauths:sign-in"
+LOGOUT = "userauths:sign-in"
 AUTH_USER_MODEL = "userauths.User"
 
 

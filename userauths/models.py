@@ -20,7 +20,7 @@ def user_directory_path(instance, filename):
     return "user_{0}/{1}".format(instance.user.id, filename)
 
 
-class User (AbstractUser):
+class User(AbstractUser):
     full_name = models.CharField(max_length=500, null=True, blank=True) 
     username= models.CharField(max_length=500, unique=True)
     email = models. EmailField(unique=True)

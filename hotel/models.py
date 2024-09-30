@@ -191,7 +191,6 @@ class Booking(models.Model):
     num_adults = models.PositiveIntegerField(default=0)
     num_children = models.PositiveIntegerField(default=1)
     
-    
     checked_in = models.BooleanField(default=False)
     checked_out = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
