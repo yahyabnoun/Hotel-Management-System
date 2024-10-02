@@ -6,8 +6,8 @@
   <h2 class="text-center">Your Payment is Paid</h2>
 
     <!-- component -->
-    <div class="mt-5 d-flex align-items-center justify-content-center">
-        <div class="bg-white shadow p-4 col-12 col-md-6 mx-auto text-center rounded-3">
+    <div class="my-5 d-flex align-items-center justify-content-center">
+        <div class="mb-5 bg-white shadow p-4 col-12 col-md-6 mx-auto text-center rounded-3">
             <!-- Success Icon (SVG) -->
             <svg viewBox="0 0 24 24" class="text-success mb-4" style="width: 50px; height: 50px;">
                 <path fill="currentColor"
@@ -22,8 +22,8 @@
     
             <!-- Back Button -->
             <div class="d-grid">
-                <a href="/" class="btn btn-primary btn-block rounded-3">
-                    GO BACK
+                <a href="{% url 'user_dashboard:dashboard' %}" class="btn btn-primary btn-block rounded-3">
+                    GO TO DASHBOARD
                 </a>
             </div>
         </div>

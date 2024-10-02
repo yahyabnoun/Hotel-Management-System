@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from flask import redirect
@@ -89,6 +90,7 @@ def room_type_detail(request, slug, rt_slug):
 
 
 def checkout(request):
+
     if request.user.is_authenticated:
         if request.method == 'POST':
             room_id = request.POST.get('room_id')
@@ -117,6 +119,20 @@ def checkout(request):
                 next = request.POST.get('next', '/checkout')
                 return HttpResponseRedirect(next)
 
+
+
+            
+            date_format = "%Y-%m-%d"
+            checkin_date = datetime.strptime(checkin, date_format).date()
+            checkout_date = datetime.strptime(checkout, date_format).date()
+
+            totaldays = (checkout_date - checkin_date).days
+            if totaldays == 0 :
+                totaldays = 1
+            
+            TotalPrieroomtype = room_typePost.price * totaldays
+
+
             booking = Booking.objects.create(
                 user=request.user,
                 hotel=hotelPost,
@@ -125,6 +141,8 @@ def checkout(request):
                 check_out_date=checkout,
                                num_adults=adult,
                 num_children=children,
+                total_days = totaldays,
+                total = TotalPrieroomtype,
             )
 
             # Use the set() method to assign the room
@@ -145,12 +163,12 @@ def checkout(request):
             TOTAL = 0
             
             for x in booking:
-                TOTAL += x.room_type.price
+                TOTAL += x.total
             
             
             context = {
                 "booking": booking,
-                "TOTAL": TOTAL
+                "TOTAL": TOTAL,
             }
             
             
@@ -169,6 +187,7 @@ def checkout(request):
 def deleteFromcheckout(request,booking_id):
     
     booking = Booking.objects.filter(user=request.user,id=booking_id,payment_status='pending').delete()
+    messages.success(request, 'Booking deleted successfully!')
     
     next = request.POST.get('next', '/checkout/')
     return HttpResponseRedirect(next)

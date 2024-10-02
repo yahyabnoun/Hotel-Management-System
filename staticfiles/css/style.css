@@ -441,3 +441,28 @@
     padding-right: 0;
     border-right: none;
 }
+
+
+
+    .alert-container {
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        display: flex;
+        flex-direction: column-reverse;
+        gap: 10px; /* Space between alerts */
+    }
+    
+    .alertModel {
+        padding: 10px 20px;
+        background-color: #98C33A;
+        color: white;
+        border-radius: 5px;
+        min-width: 250px;
+        opacity: 1;
+        transition: opacity 0.5s ease;
+    }
+    
+    .alertModel.hide {
+        opacity: 0;
+    }

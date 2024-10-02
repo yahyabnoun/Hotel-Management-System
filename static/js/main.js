@@ -92,3 +92,11 @@
     
 })(jQuery);
 
+    document.querySelectorAll('.alertModel').forEach((alert, index) => {
+        setTimeout(() => {
+            alert.classList.add('hide');
+            setTimeout(() => {
+                alert.remove();
+            }, 100); // Delay removal for fade-out effect
+        }, 3000 * (index + 1)); // Stagger alerts to avoid all disappearing at once
+    });

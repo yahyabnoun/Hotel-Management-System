@@ -5,6 +5,17 @@
 {% block content %}
 
 <section class="h-100 h-custom">
+
+  <div class="alert-container">
+
+    {%for msg in messages%}
+
+    <div class="alertModel">{{msg}}</div>
+
+    {%endfor%}
+
+  </div>
+
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col">
@@ -44,18 +55,20 @@
                             {{bkRoom.room_type.number_of_beds}}</p>
                           <p class="small mb-0">Capacity :
                             {{bkRoom.room_type.room_capacity}}</p>
+                          <p class="small mb-0">total days :
+                            {{bkRoom.total_days}}</p>
                         </div>
                       </div>
                       <div class="d-flex flex-row align-items-center">
                         <div style="width: 110px;">
-                          <h5 class="mb-0">{{bkRoom.room_type.price}} $</h5>
+                          <h5 class="mb-0">{{bkRoom.total}} $</h5>
                         </div>
                         <a href="#!" style="color: #cecece;"></a>
                         <form method="POST"
                           action="{% url 'hotel:deleteFromcheckout' bkRoom.id %}">
                           {% csrf_token %}
-                          <button type="submit"><i
-                              class="fas fa-trash-alt"></i></button>
+                          <button style="background: transparent; border: none;" type="submit"><i
+                              class="fas fa-trash-alt" style="color: #86B817;"></i></button>
                         </form>
                       </div>
                     </div>
@@ -137,11 +150,11 @@
                         </div>
                       </button> -->
 
-                <div id="paypal-button-container">
+                      <div id="paypal-button-container">
 
-                    </form>
+                      </form>
+                    </div>
                   </div>
-                </div>
 
                 </div>
               </div>
@@ -153,7 +166,8 @@
       </div>
     </div>
   </div>
-  <script src="https://www.paypal.com/sdk/js?client-id=AaEciTdF3EVPyMfRB1ym5X-kh7xoWPMhjFmlGhnsMzrELb0DJeJCSDKL9oP_FA5d06bQzoHf-Cez_E9Y&currency=USD"></script>
+  <script
+    src="https://www.paypal.com/sdk/js?client-id=AaEciTdF3EVPyMfRB1ym5X-kh7xoWPMhjFmlGhnsMzrELb0DJeJCSDKL9oP_FA5d06bQzoHf-Cez_E9Y&currency=USD"></script>
 
   <script>
     let booking_total = "{{TOTAL}}";
